@@ -1,11 +1,12 @@
 use candid::{CandidType, Deserialize};
-use std::{include_bytes, option};
+use std::include_bytes;
 
 mod core;
 
 const IMAGE_SIZE_IN_PIXELS: usize = 1024;
-const LOGO_TRANSPARENCY: &[u8] = include_bytes!("../assets/logo_transparent.png");
-const LOGO_WHITE: &[u8] = include_bytes!("../assets/logo_white.png");
+const LOGO_TRANSPARENCY: &[u8] = include_bytes!("./assets/logo_transparent.png");
+const LOGO_WHITE: &[u8] = include_bytes!("./assets/logo_white.png");
+
 
 #[derive(CandidType, Deserialize)]
 struct Options {
@@ -38,11 +39,15 @@ fn qrcode_impl(input: String, options: Options) -> QrResult {
             message: e.to_string(),
         }),
     };
+    ic_cdk::println!(
+        "Executed instructions: {}",
+        ic_cdk::api::performance_counter(0)
+    );
     result
 }
 
 #[ic_cdk::update]
-fn qrcode_query(input: String, options: Options) -> QrResult {
+fn qrcode(input: String, options: Options) -> QrResult {
     qrcode_impl(input, options)
 }
 
