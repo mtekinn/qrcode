@@ -1,6 +1,6 @@
 use image::{imageops, ImageBuffer, Rgba};
 use qrcode_generator::QrCodeEcc;
-use std::{io::Cursor, vec};
+use std::io::Cursor;
 
 use crate::Options;
 
@@ -42,7 +42,6 @@ fn make_transparent(qr: &mut ImageBuffer<Rgba<u8>, Vec<u8>>) {
     }
 }
 
-
 fn add_logo(qr: &mut ImageBuffer<Rgba<u8>, Vec<u8>>, logo: &[u8]) {
     let image_size = qr.width().min(qr.height()) as usize;
     let element_size = get_qr_element_size(qr);
@@ -75,6 +74,7 @@ fn add_logo(qr: &mut ImageBuffer<Rgba<u8>, Vec<u8>>, logo: &[u8]) {
 
 fn add_gradient(qr: &mut ImageBuffer<Rgba<u8>, Vec<u8>>) {
     let image_size = qr.width().min(qr.height()) as usize;
+
     let gradient = colorgrad::CustomGradient::new()
         .colors(&[
             colorgrad::Color::from_rgba8(100, 0, 100, 255),
@@ -84,7 +84,6 @@ fn add_gradient(qr: &mut ImageBuffer<Rgba<u8>, Vec<u8>>) {
         .unwrap();
 
     let center = (image_size / 2) as u32;
-    
     for (x, y, pixel) in qr.enumerate_pixels_mut() {
         if pixel.0 == [0, 0, 0, 255] {
             let distance = x.abs_diff(center) + y.abs_diff(center);
